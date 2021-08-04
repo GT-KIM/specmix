@@ -1,7 +1,7 @@
 # specmix speech enhancement task
 Pytorch implementation 
 
-![image1](./speech_enhancement/image/model.png)
+![image1](./image/model.png)
 
 
 ## Dependencies
