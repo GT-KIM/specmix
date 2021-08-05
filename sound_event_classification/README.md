@@ -1,5 +1,7 @@
 # specmix sound event classification
-Pytorch implementation 
+Pytorch implementation  
+If you wanna use data augmentation method only, see util.py and use Generator classes.  
+Since the Generator classes are written by numpy, you can use it to both Pytorch and Tensorflow.
 
 ## Dependencies
 Python==3.7  
