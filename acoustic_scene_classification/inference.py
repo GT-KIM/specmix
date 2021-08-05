@@ -3,18 +3,15 @@ os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
 import numpy as np
-import datetime
 import pandas as pd
 import librosa
 import soundfile as sound
 from sklearn.metrics import confusion_matrix
-import sys, subprocess
 
 import torch
-import torch.nn.functional as F
 from torch import nn, optim
 from torch.utils.data import DataLoader, Dataset
-from utils import MixupGenerator, plot_confusion_matrix
+from utils import plot_confusion_matrix
 from focal_loss import Focal_loss
 
 MODE = 'INF'  # 'DEV' uses the official data fold; 'VAL' uses all data in development set for training
@@ -61,22 +58,7 @@ wd = 1e-3
 num_stacks = 4    # number of residual stacks
 stacking_frames = None # put None if not applied
 
-
-'''
-Applying domain adaptation OR using focal loss function
-(Set TRUE for both flags is not supported)
-'''
-
-domain_aux = False     # whether to add an auxiliary classifier to apply mild domain adaptation
-beta = 0.1            # apply weighting to this new loss
-
-focal_loss = True    # whether to use focal loss
-gamma=1.0
-alpha=0.3
-
 TEST = 1    #use 1/n data to verify the model before training; put 1 if not applied
-
-assert((domain_aux and focal_loss) == False)
 
 def to_categorical(y, num_classes) :
     return np.eye(num_classes, dtype='uint8')[y]
@@ -89,11 +71,6 @@ y_train_labels =  dev_train_df['scene_label'].astype('category').cat.codes.value
 ClassNames = np.unique(dev_train_df['scene_label'])
 NumClasses = len(ClassNames)
 y_train = to_categorical(y_train_labels, NumClasses)
-
-if domain_aux:
-    y_train_domain_labels =  dev_train_df['source_label'].astype('category').cat.codes.values
-    y_train_domain = to_categorical(y_train_domain_labels, 2)
-
 
 
 # load wav files and get log-mel spectrograms, deltas, and delta-deltas
@@ -147,11 +124,7 @@ model = model_resnet(NumClasses,
                      num_stacks=num_stacks,
                      output_num_filter_factor=output_num_filters_factor,
                      stacking_frame=stacking_frames,
-                     domain_aux=domain_aux)
-
-optimizer = optim.Adam(model.parameters(),lr=max_lr,weight_decay=1e-3)
-scheduler = optim.lr_scheduler.MultiStepLR(optimizer, milestones=[50, 100, 150, 200], gamma=0.1)
-criterion = Focal_loss()
+                     domain_aux=False)
 
 savedir = "ckpt/"
 model.load_state_dict(torch.load("ckpt/model.pth")['model'])

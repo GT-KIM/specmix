@@ -3,23 +3,19 @@ os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
 os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 
 import numpy as np
-import datetime
 import pandas as pd
 import librosa
 import soundfile as sound
 
-import sys, subprocess
 
 import torch
-import torch.nn.functional as F
 from torch import nn, optim
 
 from utils import MixupGenerator, CutmixGenerator, SpecmixGenerator, SpecaugmentGenerator, EnergymaskingGenerator
 from focal_loss import Focal_loss, CrossEntropyLoss
 from torch.utils.data import DataLoader, Dataset
 import torchvision.models as models
-MODE = 'DEV'  # 'DEV' uses the official data fold; 'VAL' uses all data in development set for training
-
+MODE = 'DEV'
 ThisPath = 'data/DCASE2020A/'
 num_audio_channels = 1
 sr = 44100
@@ -27,9 +23,6 @@ sr = 44100
 if MODE == 'DEV':
     TrainFile = ThisPath + 'evaluation_setup/fold1_train.csv'
     ValFile = ThisPath + 'evaluation_setup/fold1_evaluate.csv'
-
-elif MODE == 'VAL':
-    TrainFile = ThisPath + '/meta.csv'
 
 SampleDuration = 10
 
@@ -61,15 +54,6 @@ stacking_frames = None # put None if not applied
 Applying domain adaptation OR using focal loss function
 (Set TRUE for both flags is not supported)
 '''
-
-domain_aux = False     # whether to add an auxiliary classifier to apply mild domain adaptation
-beta = 0.1            # apply weighting to this new loss
-
-focal_loss = True    # whether to use focal loss
-gamma=1.0
-alpha=0.3
-
-assert((domain_aux and focal_loss) == False)
 
 def to_categorical(y, num_classes) :
     return np.eye(num_classes, dtype='uint8')[y]
@@ -203,7 +187,7 @@ model = model_resnet(NumClasses,
                      num_stacks=num_stacks,
                      output_num_filter_factor=output_num_filters_factor,
                      stacking_frame=stacking_frames,
-                     domain_aux=domain_aux)
+                     domain_aux=False)
 """
 optimizer = optim.Adam(model.parameters(),lr=max_lr,weight_decay=1e-3)
 scheduler = optim.lr_scheduler.MultiStepLR(optimizer, milestones=[10, 30,50, 70,90], gamma=0.1)

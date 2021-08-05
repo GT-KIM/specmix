@@ -1,6 +1,5 @@
-import torch
 import numpy as np
-import threading, random
+import threading
 
 import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix
@@ -180,7 +179,6 @@ class CutmixGenerator():
         _, h, w, c = self.X_train.shape
         l = np.random.beta(self.alpha, self.alpha)
         X_l = l
-        y_l = l
 
         X1 = self.X_train[batch_ids[:self.batch_size]]
         X2 = self.X_train[batch_ids[self.batch_size:]]
@@ -274,9 +272,6 @@ class SpecmixGenerator():
 
     def __data_generation(self, batch_ids):
         _, h, w, c = self.X_train.shape
-        l = np.random.beta(self.alpha, self.alpha)
-        X_l = l
-        y_l = l
 
         X1 = self.X_train[batch_ids[:self.batch_size]]
         X2 = self.X_train[batch_ids[self.batch_size:]]
@@ -380,42 +375,29 @@ class SpecaugmentGenerator():
 
     def __data_generation(self, batch_ids):
         _, h, w, c = self.X_train.shape
-        l = np.random.beta(self.alpha, self.alpha)
-        X_l = l
-        y_l = l
 
         X1 = self.X_train[batch_ids[:self.batch_size]]
-        X2 = self.X_train[batch_ids[self.batch_size:]]
 
         if self.NewLength > 0:
             for j in range(X1.shape[0]):
                 StartLoc1 = np.random.randint(0, X1.shape[2] - self.NewLength)
-                StartLoc2 = np.random.randint(0, X2.shape[2] - self.NewLength)
 
                 X1[j, :, 0:self.NewLength, :] = X1[j, :, StartLoc1:StartLoc1 + self.NewLength, :]
-                X2[j, :, 0:self.NewLength, :] = X2[j, :, StartLoc2:StartLoc2 + self.NewLength, :]
 
                 if X1.shape[-1] == 6:
                     # randomly swap left and right channels
                     if np.random.randint(2) == 1:
                         X1[j, :, :, :] = X1[j:j + 1, :, :, self.swap_inds]
-                    if np.random.randint(2) == 1:
-                        X2[j, :, :, :] = X2[j:j + 1, :, :, self.swap_inds]
 
             X1 = X1[:, :, 0:self.NewLength, :]
-            X2 = X2[:, :, 0:self.NewLength, :]
 
 
         X = np.zeros(X1.shape)
-        lam = list()
         for i in range(X1.shape[0]) :
             mask, inv_mask = masking(X1[0, :, :, 0], ratio = np.random.rand(1)[0],
                                      t_times= 1, f_times=1)
-            lam.append(mask.sum() / (X.shape[1] * X.shape[2]))
             for j in range(X1.shape[3]) :
                 X[i,:,:,j] = mask * X1[i,:,:,j]
-        lam = np.array(lam)
-        lam = lam.reshape((self.batch_size, 1))
 
         if self.datagen:
             for i in range(self.batch_size):
@@ -427,11 +409,9 @@ class SpecaugmentGenerator():
 
             for y_train_ in self.y_train:
                 y1 = y_train_[batch_ids[:self.batch_size]]
-                y2 = y_train_[batch_ids[self.batch_size:]]
                 y.append(y1)
         else:
             y1 = self.y_train[batch_ids[:self.batch_size]]
-            y2 = self.y_train[batch_ids[self.batch_size:]]
             y = y1
 
         if self.y_train_2 is None:
@@ -587,9 +567,6 @@ class EnergymaskingGenerator():
 
     def __data_generation(self, batch_ids):
         _, h, w, c = self.X_train.shape
-        l = np.random.beta(self.alpha, self.alpha)
-        X_l = l
-        y_l = l
 
         X1 = self.X_train[batch_ids[:self.batch_size]]
         X2 = self.X_train[batch_ids[self.batch_size:]]
