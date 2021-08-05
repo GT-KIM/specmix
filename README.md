@@ -11,3 +11,6 @@ Reference of Generator class: https://github.com/yu4u/mixup-generator
 
 ## Method
 ![image2](./image/Fig2.png)
+
+## Usage
+See acoustic_scene_classification, sound_event_classification and speech_enhancement folder.
