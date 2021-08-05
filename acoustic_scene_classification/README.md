@@ -1,5 +1,7 @@
 # specmix acoustic scene classification
-Pytorch implementation 
+Pytorch implementation  
+If you wanna use data augmentation method only, see util.py and use Generator classes.  
+Since the Generator classes are written by numpy, you can use it to both Pytorch and Tensorflow.
 
 ## Dependencies
 Python==3.7  
@@ -27,6 +29,7 @@ data_augment = 'None' or 'Mixup' or 'Cutmix' or 'Specaugment' or 'Specmix'
 > python inference.py
 ### plot loss curve
 > python test.py
+
 ## models are available here.
 
 https://drive.google.com/drive/folders/1Rgqx9T591J-ZAo8eK9loNrvnRzz5-jM7?usp=sharing
