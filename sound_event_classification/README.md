@@ -1,41 +1,32 @@
-# specmix speech enhancement task
+# specmix sound event classification
 Pytorch implementation 
-
-![image1](./image/model.png)
-
 
 ## Dependencies
 Python==3.7  
 Numpy==1.19.5  
 Scipy==1.4.1  
-Pytorch==1.7.1+cu101  
-oct2py==5.0.4  
-pesq==0.0.1 (see https://github.com/ludlows/python-pesq)  
+Pytorch==1.7.1+cu101   
 librosa==0.7.2  
 matplotlib==3.2.1  
-tqdm==4.46.1  
-MATLAB(optional)  
+scikit-learn==0.23.1  
+pandas==1.0.4
 
 ## Train
 
-train_clean='your/DEMANDdata/train_clean/.wav'  
-train_noisy='your/DEMANDdata/train_noisy/.wav'  
+ThisPath = '/your/SECL_UMONS/data/path/'  
+TrainFile = '/your/SECL_UMONS/data/path/unilabel_split1_train.csv'  
+ValFile = '/your/SECL_UMONS/data/path/unilabel_split1_test.csv'  
 
-### No augmentation
+### train with No augmentation, Mixup, Cutmix, Specaugment, Specmix
+data_augment = 'None' 'Mixup' or 'Cutmix' or 'Specaugment' or 'Specmix'  
 > python train.py
 
-### Mixup, Cutmix, Specaugment, Specmix
-data_augment = 'Mixup' or 'Cutmix' or 'Specaugment' or 'Specmix'  
-> python train_augment.py
-
 ## Evaluate
-### Generate test wav file and calculate PESQ, CSIG, CBAK, COVL, SSNR
+### Inference
 data_augment = 'None' or 'Mixup' or 'Cutmix' or 'Specaugment' or 'Specmix'  
-train_clean='your/DEMANDdata/test_clean/.wav'  
-train_noisy='your/DEMANDdata/test_noisy/.wav' 
+> python inference.py
+### plot loss curve
 > python test.py
-### calculate PESQ, CSIG, CBAK, COVL, SSNR using MATLAB
-> ./eval/main.m
-## Data, model and enhanced speech are available here.
+## models are available here.
 
 https://drive.google.com/drive/folders/1Rgqx9T591J-ZAo8eK9loNrvnRzz5-jM7?usp=sharing
