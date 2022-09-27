@@ -32,4 +32,4 @@ data_augment = 'None' or 'Mixup' or 'Cutmix' or 'Specaugment' or 'Specmix'
 
 ## models are available here.
 
-https://drive.google.com/drive/folders/1Rgqx9T591J-ZAo8eK9loNrvnRzz5-jM7?usp=sharing
+https://www.dropbox.com/sh/7iqv0htycluwx35/AADFG9yxUdLLZaUs0j3U8mzTa?dl=0
