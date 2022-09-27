@@ -31,4 +31,4 @@ data_augment = 'None' or 'Mixup' or 'Cutmix' or 'Specaugment' or 'Specmix'
 > python test.py
 ## models are available here.
 
-https://drive.google.com/drive/folders/1Rgqx9T591J-ZAo8eK9loNrvnRzz5-jM7?usp=sharing
+https://www.dropbox.com/sh/btek8nnsb8y7rpr/AACd9FV6hg33Caaq95nd8iM4a?dl=0
