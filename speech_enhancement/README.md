@@ -38,4 +38,4 @@ train_noisy='your/DEMANDdata/test_noisy/.wav'
 > ./eval/main.m
 ## Data, model and enhanced speech are available here.
 
-https://drive.google.com/drive/folders/1Rgqx9T591J-ZAo8eK9loNrvnRzz5-jM7?usp=sharing
+https://www.dropbox.com/sh/m3bxt0g542bep3p/AAB2a1pjAFzU5cXddiYigZaGa?dl=0
